@@ -1,0 +1,62 @@
+{
+  "about": "TEMPLATE — copy this file to goldset.json and replace the examples with 8 questions about YOUR my_kb/ documents: 6 with answerable=true and 2 with answerable=false. The notebook warns you if an evidence phrase is not in your documents word-for-word.",
+  "kb_files": ["alterTable.md", "createDB.md", "createWH.md", "retrieveData.md"],
+  "questions": [
+    {
+      "qid": "Q1",
+      "question": "What python command creates the database in Snowflake?",
+      "source": "createDB.md",
+      "evidence": ["root.databases.create() creates a database in Snowflake"],
+      "answerable": true
+    },
+    {
+      "qid": "Q2",
+      "question": "What is the primary key of the created table?",
+      "source": "alterTable.md",
+      "evidence": ["{\"name\": \"ELEVATION\", \"column_names\": [\"ELEVATION\"], \"constraint_type\": \"PRIMARY KEY\"}"],
+      "answerable": true
+    },
+    {
+      "qid": "Q3",
+      "question": "Is the auto-suspend timeout measured in minutes, seconds, or milliseconds?",
+      "source": "createWH.md",
+      "evidence": ["The auto-suspend timeout is in units of seconds."],
+      "answerable": true
+    },
+    {
+      "qid": "Q4",
+      "question": "What is the return type of the fetch function?",
+      "source": "retrieveData.md",
+      "evidence": ["fetch() returns a TableModel object."],
+      "answerable": true
+    },
+    {
+      "qid": "Q5",
+      "question": "What does the to_dict() function do?",
+      "source": "retrieveData.md",
+      "evidence": ["You can then call .to_dict() on the resulting object to view its detailed information."],
+      "answerable": true
+    },
+    {
+      "qid": "Q6",
+      "question": "Why would I use virtual warehouses in Snowflake?",
+      "source": "createWH.md",
+      "evidence": ["you might need to create another warehouse temporarily to run certain queries"],
+      "answerable": true
+    },
+    {
+      "qid": "Q7",
+      "question": "What state is the city of Cincinnati located in?",
+      "source": null,
+      "evidence": [],
+      "answerable": false
+    },
+    {
+      "qid": "Q8",
+      "question": "How can you run a select query against the table?",
+      "source": null,
+      "evidence": [],
+      "answerable": false
+    }
+  ]
+}
