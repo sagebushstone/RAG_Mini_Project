@@ -1,0 +1,39 @@
+{
+  "about": "TEMPLATE — copy this to my_alerts.json and replace the examples with 12 alerts of your own: 6 with expected='escalate' and 6 with expected='close'. Base them on real alert types (Windows event logs, EDR detections, cloud audit trails, IDS signatures) and write them in your own words.",
+  "how_to_fill_this_in": {
+    "id": "A01 .. A12",
+    "alert": "the alert text as it would appear in a console — one sentence",
+    "expected": "'escalate' if an analyst must look at it now, 'close' if it is routine noise",
+    "note": "one line saying WHY an analyst would make that call. If you cannot justify it, it is not a good test case."
+  },
+  "include_at_least_two_hard_cases": [
+    "one alert you would ESCALATE whose text contains none of your keywords (a missed detection waiting to happen)",
+    "one alert you would CLOSE that does contain one of your keywords (an over-escalation waiting to happen)"
+  ],
+  "alerts": [
+    {
+      "id": "A01",
+      "alert": "EXAMPLE — delete this. Replace with a real-looking alert you would escalate.",
+      "expected": "escalate",
+      "note": "why an analyst would escalate it"
+    },
+    {
+      "id": "A02",
+      "alert": "EXAMPLE — delete this. A serious alert whose wording contains NONE of your keywords — this is the hard case that exposes a missed detection.",
+      "expected": "escalate",
+      "note": "why it is serious despite the mild wording"
+    },
+    {
+      "id": "A03",
+      "alert": "EXAMPLE — delete this. Replace with a routine alert you would close.",
+      "expected": "close",
+      "note": "why it is routine"
+    },
+    {
+      "id": "A04",
+      "alert": "EXAMPLE — delete this. A routine alert that DOES contain one of your keywords — the hard case that exposes an over-escalation.",
+      "expected": "close",
+      "note": "what context makes it harmless (approved change? test system? own scanner?)"
+    }
+  ]
+}
