@@ -1,0 +1,66 @@
+{
+  "about": "Ground truth for Mini-Project 5. For every service the simulated hosts expose, the KB section that SHOULD be returned -- or null where project_cve_kb.md genuinely has no entry, which is a real blind spot no matching rule can fix. Do NOT edit; add your own host in Part 9 instead. Some services also carry `must_not`: a section that must NOT appear, because it describes a different version of the same product.",
+  "services": [
+    {
+      "host": "10.0.0.5",
+      "service": "vsftpd 2.3.4",
+      "expected": "vsftpd 2.3.4"
+    },
+    {
+      "host": "10.0.0.5",
+      "service": "OpenSSH 7.2p2 Ubuntu",
+      "expected": "OpenSSH 7.2p2"
+    },
+    {
+      "host": "10.0.0.5",
+      "service": "Apache httpd 2.4.49",
+      "expected": "Apache httpd 2.4.49"
+    },
+    {
+      "host": "10.0.0.8",
+      "service": "Samba smbd 3.5.0",
+      "expected": "Samba 3.5.0"
+    },
+    {
+      "host": "10.0.0.8",
+      "service": "MySQL 5.5.40",
+      "expected": "MySQL 5.5"
+    },
+    {
+      "host": "10.0.0.12",
+      "service": "Linux telnetd",
+      "expected": "Telnet service"
+    },
+    {
+      "host": "10.0.0.12",
+      "service": "Apache httpd 2.2.8 (OpenSSL 1.0.1)",
+      "expected": "OpenSSL 1.0.1",
+      "note": "expected the OpenSSL 1.0.1 advisory. must_not: this host runs Apache 2.2.8, so an answer that also drags in the 2.4.49 advisory is reporting a vulnerability that is not there -- count that as a wrong-version answer even though the right one is in it.",
+      "must_not": [
+        "Apache httpd 2.4.49"
+      ]
+    },
+    {
+      "host": "10.0.0.12",
+      "service": "Redis key-value store 4.0.9",
+      "expected": "Redis 4.0"
+    },
+    {
+      "host": "10.0.0.20",
+      "service": "ProFTPD 1.3.5",
+      "expected": "ProFTPD 1.3.5"
+    },
+    {
+      "host": "10.0.0.20",
+      "service": "nginx 1.18.0",
+      "expected": null,
+      "note": "a true blind spot: the KB has no nginx entry"
+    },
+    {
+      "host": "10.0.0.20",
+      "service": "PostgreSQL 9.6.24",
+      "expected": null,
+      "note": "a true blind spot: the KB has no PostgreSQL entry"
+    }
+  ]
+}
