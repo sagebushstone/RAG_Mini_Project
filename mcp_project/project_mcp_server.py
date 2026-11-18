@@ -152,8 +152,8 @@ def lookup_cve_v2(service: str) -> str:
         #     OpenSSL 1.0.1 section matches instead, which is the right answer.
         ################
 
-        match = ____                                                               # <<< 1 line
-        if ____:                                                                   # <<< 1 line
+        match =  product in text and (version is None or version.group() in text)      # <<< 1 line
+        if match:                                                                   # <<< 1 line
             hits.append(body)
 
     return "\n\n".join(hits) if hits else f"No known CVEs for '{service}' in the knowledge base."
@@ -175,7 +175,7 @@ def lookup_cve_v2(service: str) -> str:
 @mcp.resource("kb://cve")
 def cve_kb() -> str:
     """The full CVE knowledge base as Markdown text (an MCP *resource*)."""
-    return ____                                                                    # <<< 1 line
+    return  _kb_path().read_text(encoding="utf8")                                 # <<< 1 line
 
 
 if __name__ == "__main__":
