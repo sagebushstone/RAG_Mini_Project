@@ -69,6 +69,11 @@ _SIMULATED_HOSTS = {
         "80/tcp   open  http     nginx 1.18.0",
         "5432/tcp open  postgres PostgreSQL 9.6.24",
     ],
+    "10.0.0.30": [
+        "8080/tcp open  http     Apache Tomcat 9.0.30",
+        "8443/tcp open  ssl/http Jetty 9.4.40",
+        "8009/tcp open  ajp13    Apache Jserv (Protocol v1.3)",
+    ]
 }
 
 
@@ -157,6 +162,105 @@ def lookup_cve_v2(service: str) -> str:
             hits.append(body)
 
     return "\n\n".join(hits) if hits else f"No known CVEs for '{service}' in the knowledge base."
+
+@mcp.tool()
+def assess_vulnerability_severity(service: str) -> str:
+    """Assess the severity of known vulnerabilities for a specific service and
+    version using severity labels and risk-related keywords in the CVE
+    knowledge base.
+
+    Provide the service product and version (for example, 'nginx 1.18.0').
+    The tool first checks for an explicit Severity label in the matching KB
+    entry. If none exists, it uses vulnerability-related keywords to estimate
+    severity. This is a heuristic assessment, not an official CVSS score.
+    """
+    sections = _load_kb_sections()
+    text = service.lower()
+
+    # Find KB sections matching both the product and version.
+    hits = []
+
+    for title, body in sections.items():
+        product = title.lower().split()[0]
+        version = re.search(r"\d[\d.p]*", title)
+
+        match = (
+            product in text
+            and (version is None or version.group() in text)
+        )
+
+        if match:
+            hits.append((title, body))
+
+    if not hits:
+        return f"No matching vulnerability information found for '{service}'."
+
+    # Severity keywords, ordered from highest to lowest severity.
+    severity_keywords = {
+        "Critical": [
+            "remote code execution",
+            "arbitrary code execution",
+            "unauthenticated remote code",
+            "rce",
+        ],
+        "High": [
+            "authentication bypass",
+            "privilege escalation",
+            "arbitrary file read",
+            "arbitrary file write",
+        ],
+        "Medium": [
+            "information disclosure",
+            "denial of service",
+            "memory corruption",
+        ],
+        "Low": [
+            "limited information disclosure",
+            "low severity",
+        ],
+    }
+
+    results = []
+
+    for title, body in hits:
+        # Prefer an explicitly documented severity.
+        explicit = re.search(
+            r"\bSeverity\s*:\s*(Critical|High|Medium|Low)\b",
+            body,
+            re.IGNORECASE,
+        )
+
+        if explicit:
+            severity = explicit.group(1).capitalize()
+            evidence = f"Explicit severity label found: {severity}"
+        else:
+            # Fall back to keyword matching.
+            body_lower = body.lower()
+            severity = "Unknown"
+            evidence = "No recognized severity indicators found."
+
+            for level, keywords in severity_keywords.items():
+                found = [
+                    keyword
+                    for keyword in keywords
+                    if re.search(
+                        r"\b" + re.escape(keyword) + r"\b",
+                        body_lower,
+                    )
+                ]
+
+                if found:
+                    severity = level
+                    evidence = "Matched keywords: " + ", ".join(found)
+                    break
+
+        results.append(
+            f"Service: {title}\n"
+            f"Estimated Severity: {severity}\n"
+            f"Evidence: {evidence}"
+        )
+
+    return "\n\n".join(results)
 
 
 ###################  TODO 2 — expose the knowledge base as a RESOURCE  ###################
